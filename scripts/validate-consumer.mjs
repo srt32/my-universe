@@ -88,6 +88,12 @@ export function validateRepository() {
   for (const [name, workflow] of Object.entries(workflows)) {
     const uses = actionUses(workflow);
     assert.ok(uses.length > 0, `${name} workflow must use pinned actions`);
+    const allUses = [...workflow.matchAll(/^\s*uses:\s*(\S+)\s*$/gm)];
+    assert.equal(
+      uses.length,
+      allUses.length,
+      `${name} workflow contains an action without a full SHA pin`
+    );
     for (const [, action, sha] of uses) {
       assert.equal(sha.length, 40, `${action} must be pinned to a full SHA`);
     }

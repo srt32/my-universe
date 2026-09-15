@@ -67,7 +67,7 @@ function createItem(item) {
     source.className = "source-link";
     source.href = sourceUrl;
     source.target = "_blank";
-    source.rel = "noreferrer";
+    source.rel = "noopener noreferrer";
     source.textContent = "View public source";
     details.append(source);
   }

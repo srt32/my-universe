@@ -31,7 +31,7 @@ can validate files and workflows, but it cannot prove cloud activation.
 2. Serve only the publishable directory:
 
    ```bash
-   python3 -m http.server 4173 --directory site
+   python3 -m http.server 4173 --bind 127.0.0.1 --directory site
    ```
 
 3. Open http://127.0.0.1:4173 and confirm:
@@ -91,15 +91,18 @@ Expected proof:
 
 ### Pre-merge plugin branch rehearsal
 
-This local-only path exercises the plugin pull request before it reaches the
-default branch. Keep the plugin checkout outside this consumer repository:
+This local-only path exercises the reviewed plugin pull request commit before it
+reaches the default branch. Keep the plugin checkout outside this consumer
+repository. The commit below is the inspected head of the plugin pull request;
+if that pull request changes, review the new diff and replace the SHA before
+running any plugin code.
 
 ```bash
-gh repo clone srt32/universe-concierge ../universe-concierge
+gh repo clone srt32/universe-concierge ../universe-concierge -- --no-checkout
 cd ../universe-concierge
-gh pr checkout 1
-npm ci
-npm run build
+git fetch origin pull/1/head
+git checkout --detach 1ed979721c9f74f2fbcd0fbc710dd6a5f4f7bfc8
+test "$(git rev-parse HEAD)" = "1ed979721c9f74f2fbcd0fbc710dd6a5f4f7bfc8"
 copilot plugin marketplace add .
 copilot plugin marketplace browse universe-demo
 copilot plugin install universe-concierge@universe-demo
@@ -107,10 +110,12 @@ cd ../my-universe
 copilot
 ```
 
-If this consumer is in a worktree with a different directory name, replace the
-last `cd` with its actual path. This rehearsal does not prove cloud activation;
-it proves the local marketplace, agent, skill, MCP server, and hooks from the
-plugin pull request.
+Run the plugin only after reviewing and trusting that exact commit; plugins can
+execute code with the permissions of Copilot CLI. Prefer a disposable local
+environment with no unrelated credentials or sensitive files. If this consumer
+is in a worktree with a different directory name, replace the last `cd` with its
+actual path. This rehearsal does not prove cloud activation; it proves the local
+marketplace, agent, skill, MCP server, and hooks from the reviewed plugin commit.
 
 ## Copilot cloud agent end-to-end
 
@@ -314,3 +319,14 @@ Call `get_event_overview` again and preserve the complete metadata object. Call
 `get_session` for each selected canonical ID and copy each session's source and
 HTTPS source URL exactly. The hook rejects missing provenance, mismatched
 sources, and fallback content labeled as live.
+
+### The skill refers to a schema path that is not in this consumer
+
+The plugin pull request's skill currently names
+`schemas/itinerary.schema.json`, which is maintained in the plugin repository.
+This consumer intentionally does not copy that moving contract. Use the
+document shape described by the installed skill, call `validate_itinerary`, and
+let the packaged hook enforce the complete contract. If the agent cannot
+proceed without reading that repository-local schema, treat it as a plugin
+contract blocker and fix it in `srt32/universe-concierge`, not by duplicating
+the schema or validator here.
