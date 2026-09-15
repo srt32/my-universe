@@ -190,6 +190,7 @@ h3 {
 .timeline-type {
   margin-bottom: 0.55rem;
   padding: 0;
+  color: var(--accent);
   background: transparent;
 }
 

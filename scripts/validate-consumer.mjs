@@ -104,6 +104,12 @@ export function validateRepository() {
   assert.match(workflows.pages, /id-token:\s*write/);
   assert.match(workflows.pages, /path:\s*site/);
   assert.match(workflows.pages, /cancel-in-progress:\s*false/);
+  assert.match(workflows.pages, /^permissions:\s*\{\}\s*$/m);
+  assert.equal(
+    workflows.pages.match(/if:\s*github\.ref == 'refs\/heads\/main'/g)?.length,
+    2,
+    "Both Pages jobs must reject manual dispatches from non-main refs"
+  );
   for (const action of [
     "actions/checkout",
     "actions/configure-pages",
