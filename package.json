@@ -1,0 +1,14 @@
+{
+  "name": "my-universe",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "check": "node --test && node scripts/validate-consumer.mjs",
+    "test": "node --test",
+    "validate": "node scripts/validate-consumer.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
