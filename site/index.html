@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta
+      name="description"
+      content="A shareable GitHub Universe itinerary created with Universe Concierge."
+    >
+    <title>My Universe</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <header class="shell site-header">
+      <a class="wordmark" href="./" aria-label="My Universe home">
+        <span class="mark" aria-hidden="true">U</span>
+        <span>My Universe</span>
+      </a>
+      <span class="status" id="status" aria-live="polite">Ready for a plan</span>
+    </header>
+
+    <main class="shell">
+      <section class="hero" aria-labelledby="page-title">
+        <h1 id="page-title">Your itinerary has not yet been generated.</h1>
+        <p class="lede" id="introduction">
+          Universe Concierge will turn an explicitly shareable prompt into a
+          sourced, conflict-free day here.
+        </p>
+      </section>
+
+      <section
+        class="empty-state"
+        id="empty-state"
+        aria-labelledby="empty-title"
+      >
+        <div>
+          <h2 id="empty-title">Start with the concierge</h2>
+          <p>
+            Choose the Universe Concierge agent in GitHub Copilot, share only
+            the interests you intend to publish, and ask it to build the plan.
+          </p>
+        </div>
+      </section>
+
+      <section class="plan" id="plan" aria-labelledby="plan-title" hidden>
+        <div class="plan-heading">
+          <div>
+            <p class="plan-date" id="plan-date"></p>
+            <h2 id="plan-title">A day for <span id="attendee"></span></h2>
+          </div>
+          <p class="source-note" id="source-note"></p>
+        </div>
+        <ol class="timeline" id="timeline"></ol>
+      </section>
+
+      <p class="error" id="error" role="alert" hidden></p>
+    </main>
+
+    <footer class="shell site-footer">
+      <p>Built from public event sources with Universe Concierge.</p>
+      <p>Schedules can change. Confirm details before attending.</p>
+    </footer>
+  </body>
+</html>
